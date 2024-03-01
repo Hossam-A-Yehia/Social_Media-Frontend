@@ -11,6 +11,14 @@ export default async function Home() {
     redirect("/login");
   }
   const token: string = session?.user?.token;
+  const userId: string = session?.user?.user._id;
 
-  return <HomeComponents token={token} />;
+  return (
+    <>
+      <head>
+        <title>ErePain || Home</title>
+      </head>
+      <HomeComponents token={token} userId={userId} />
+    </>
+  );
 }

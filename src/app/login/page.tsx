@@ -14,6 +14,9 @@ export default async function page() {
 
   return (
     <>
+      <head>
+        <title>ErePain || Login</title>
+      </head>
       <FormLogin />
     </>
   );

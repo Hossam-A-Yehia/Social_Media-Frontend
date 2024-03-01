@@ -1,39 +1,33 @@
 "use client";
 import { MoreVertical, UserPlus } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import {
-  fetchSuggestedFriends,
-  fetchUserInfo,
-  sendRequest,
-} from "@/app/actions/action";
+import { fetchSuggestedFriends, sendRequest } from "@/app/actions/action";
 import { MdOutlineDoneAll } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useSession } from "next-auth/react";
 import { SuggestedFriendsType } from "@/app/type/types";
-import { useEffect, useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
-export default function SuggestedFrients({ token }: { token: string }) {
-  const { data }: any = useSession();
-  const userId = data?.user?.user?._id;
-
+export default function SuggestedFrients({
+  token,
+  userInfo,
+}: {
+  token: string;
+  userInfo: SuggestedFriendsType;
+}) {
   const queryClient = useQueryClient();
-  const { data: suggestedFrients } = useQuery({
+  const { data: suggestedFrients, isLoading } = useQuery({
     queryKey: ["sfriends"],
     queryFn: () => fetchSuggestedFriends(token),
   });
-  const { data: userInfo } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => fetchUserInfo(token, userId),
-  });
-
-
 
   const sendRequestMutation = useMutation({
     mutationFn: ({ token, requestTo }: { token: string; requestTo: string }) =>
       sendRequest({ token, requestTo }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
       queryClient.invalidateQueries({ queryKey: ["sfriends"] });
     },
   });
@@ -56,7 +50,12 @@ export default function SuggestedFrients({ token }: { token: string }) {
   };
 
   return (
-    <div className="md:flex hidden flex-col px-3 bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: 100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="md:flex hidden flex-col px-3 bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center "
+    >
       <div className="py-2 flex items-center justify-between w-full ">
         <span className="text-sm font-medium tracking-wider ">
           Suggested Friends
@@ -67,10 +66,30 @@ export default function SuggestedFrients({ token }: { token: string }) {
         />
       </div>
       <hr className="text-slate-800  w-full h-[2px] " />
+      {isLoading && (
+        <Image
+          src="/Ellipsis-1s-200px.gif"
+          height={70}
+          width={70}
+          alt="dd"
+          className="mx-auto"
+        />
+      )}
+      {suggestedFrients?.length <= 0 && (
+        <p className=" text-sm font-bold pt-2 text-sky-500">
+          No friends suggested
+        </p>
+      )}
       <ul className="flex items-center w-full  pb-3 flex-col ">
         {suggestedFrients?.map((f: SuggestedFriendsType) => (
-          <li className=" py-3 flex items-center justify-between w-full pb-3  ">
-            <div className="flex items-center gap-2">
+          <li
+            key={f._id}
+            className=" py-3 flex items-center justify-between w-full pb-3  "
+          >
+            <Link
+              href={`/profile/${f._id}`}
+              className="flex items-center gap-2"
+            >
               <Avatar>
                 <AvatarImage src={f.photo} />
               </Avatar>
@@ -80,7 +99,7 @@ export default function SuggestedFrients({ token }: { token: string }) {
                   {f.profession && f.profession}
                 </span>
               </div>
-            </div>
+            </Link>
             {userInfo?.requestsFriend?.includes(f._id) ? (
               <MdOutlineDoneAll
                 size={18}
@@ -96,6 +115,6 @@ export default function SuggestedFrients({ token }: { token: string }) {
           </li>
         ))}
       </ul>
-    </div>
+    </motion.div>
   );
 }

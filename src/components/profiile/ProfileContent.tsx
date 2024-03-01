@@ -40,9 +40,7 @@ export default function ProfileContent({ token }: { token: string }) {
     if (!userInfo?.views?.includes(data?.user?.user?._id)) {
       viewProfileMutations.mutate({ token, userId });
     }
-    console.log(userInfo?.views?.includes(userId));
   }, []);
-
   return (
     <div className=" px-[20px] lg:px-[125px]  w-full bg-slate-100 py-[20px]  dark:bg-mainbg ">
       <ProfileCover userInfo={userInfo} />
@@ -51,7 +49,7 @@ export default function ProfileContent({ token }: { token: string }) {
         <span className="text-xs text-gray-400">FRIENDS</span>
       </div>
       <div className="flex gap-3 items-start mt-4 flex-col md:flex-row">
-        <ProfileInfo userInfo={userInfo} postsLength={userPosts?.length} />
+        <ProfileInfo userInfo={userInfo} userPosts={userPosts} />
         <ProfilePosts userPosts={userPosts} />
       </div>
     </div>

@@ -6,15 +6,18 @@ import { toast } from "react-toastify";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 export default function FormLogin() {
   const { push } = useRouter();
   const [email, setEmail] = useState<string | "">("");
   const [password, setPassword] = useState<string | "">("");
+  const [isLoading, setIsLoading] = useState<boolean | false>(false);
   const session = useSession();
   console.log(session);
 
   const handleLogin = async () => {
+    setIsLoading(true);
     signIn("credentials", {
       email,
       password,
@@ -23,8 +26,10 @@ export default function FormLogin() {
       if (e?.status === 200) {
         console.log(e);
         push("/");
+        setIsLoading(false);
       } else {
         toast.error(e?.error);
+        setIsLoading(false);
       }
     });
   };
@@ -32,26 +37,41 @@ export default function FormLogin() {
   return (
     <div className="h-screen flex relative">
       <div className="w-1/3 lg:w-1/2 h-full  bg-sky-600 md:flex items-center justify-center hidden ">
-        <h1
+        <motion.h1
+          transition={{ duration: 0.6 }}
+          initial={{ x: -200, size: 10 }}
+          animate={{ x: 0, size: 0 }}
           className="text-4xl lg:text-6xl md:p-3 font-bold leading-[55px] lg:leading-[70px]  text-white "
           style={{ textShadow: "4px 4px #3180e1, 8px 8px #3180e1" }}
         >
           {" "}
           Join an <br /> Exciting Social <br /> Experience
-        </h1>
+        </motion.h1>
       </div>
       <div className="w-full md:w-2/3 lg:w-1/2 h-full  bg-white dark:bg-slate-800 flex items-center justify-center flex-col">
-        <Avatar className="size-[130px] overflow-visible   mx-auto border-[3px] dark:border-gray-500  border-gray-200 p-2 relative">
-          <AvatarImage className=" rounded-full " src="/jenna.webp" />
-          <AvatarFallback>CN</AvatarFallback>
-          <label htmlFor="Avatar">
-            <Check
-              className=" absolute z-[100] right-0 top-0 bg-green-400 rounded-full  p-2 text-white  cursor-pointer font-bold size-[35px] "
-              strokeWidth={4}
-            />
-          </label>
-        </Avatar>{" "}
-        <form action="" className="w-full p-3 md:w-[400px] my-6">
+        <motion.div
+          transition={{ duration: 0.6 }}
+          initial={{ rotateY: 360 }}
+          animate={{ rotateY: 0 }}
+        >
+          <Avatar className="size-[130px] overflow-visible   mx-auto border-[3px] dark:border-gray-500  border-gray-200 p-2 relative">
+            <AvatarImage className=" rounded-full " src="/jenna.webp" />
+            <AvatarFallback>CN</AvatarFallback>
+            <label htmlFor="Avatar">
+              <Check
+                className=" absolute z-[100] right-0 top-0 bg-green-400 rounded-full  p-2 text-white  cursor-pointer font-bold size-[35px] "
+                strokeWidth={4}
+              />
+            </label>
+          </Avatar>{" "}
+        </motion.div>
+        <motion.form
+          transition={{ duration: 0.6 }}
+          initial={{ x: -200, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          action=""
+          className="w-full p-3 md:w-[400px] my-6"
+        >
           <div className="relative mb-6">
             <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
               <User size={20} color="gray" />
@@ -77,11 +97,12 @@ export default function FormLogin() {
             />
           </div>
           <button
+            disabled={isLoading}
             onClick={() => handleLogin()}
             type="button"
-            className="text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full duration-300"
+            className="text-white bg-sky-600 hover:bg-sky-500 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full duration-300 disabled:opacity-50 disabled:cursor-not-allowed "
           >
-            Login
+            {isLoading ? "Wait..." : "Login"}
           </button>
 
           <Link
@@ -91,7 +112,7 @@ export default function FormLogin() {
             Forgot password?
           </Link>
           <div className="text-center">
-            Don't have an account?{" "}
+            Don &apos;t have an account?{" "}
             <Link
               href="/register"
               className="text-sky-400 hover:text-sky-500 duration-300 transition-all"
@@ -99,18 +120,24 @@ export default function FormLogin() {
               Register now
             </Link>
           </div>
-        </form>
+        </motion.form>
       </div>
       <div className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:block">
-        <Avatar className="size-[100px] overflow-visible bg-white dark:bg-slate-800   mx-auto   p-2">
-          <AvatarImage
-            className=" rounded-full bg-sky-600 p-2 rotate-[20deg]  "
-            src="https://friendkit.cssninja.io/assets/img/vector/logo/friendkit-white.svg"
-          />
-          <AvatarFallback>CN</AvatarFallback>
+        <motion.div
+          transition={{ duration: 0.6 }}
+          initial={{ y: -600 }}
+          animate={{ y: 0 }}
+        >
+          <Avatar className="size-[100px] overflow-visible bg-white dark:bg-slate-800   mx-auto   p-2">
+            <AvatarImage
+              className=" rounded-full bg-sky-600 p-2 rotate-[20deg]  "
+              src="https://friendkit.cssninja.io/assets/img/vector/logo/friendkit-white.svg"
+            />
+            <AvatarFallback>CN</AvatarFallback>
 
-          <input type="file" className="hidden" id="Avatar" />
-        </Avatar>{" "}
+            <input type="file" className="hidden" id="Avatar" />
+          </Avatar>{" "}
+        </motion.div>
       </div>
     </div>
   );

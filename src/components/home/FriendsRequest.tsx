@@ -2,6 +2,8 @@
 import { MoreVertical, X } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { accesptRequest, fetchFriendRequest } from "@/app/actions/action";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 import { MdOutlineDone } from "react-icons/md";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,7 +12,7 @@ import { RequestFriendsType } from "@/app/type/types";
 export default function FriendsRequest({ token }: { token: string }) {
   const queryClient = useQueryClient();
 
-  const { data: friendsRequest } = useQuery({
+  const { data: friendsRequest, isLoading } = useQuery({
     queryKey: ["rfriends"],
     queryFn: () => fetchFriendRequest(token),
   });
@@ -25,8 +27,9 @@ export default function FriendsRequest({ token }: { token: string }) {
       status: string;
     }) => accesptRequest({ token, requestId, status }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["friends"] });
+      queryClient.invalidateQueries({ queryKey: ["userInfo"] });
       queryClient.invalidateQueries({ queryKey: ["rfriends"] });
+      queryClient.invalidateQueries({ queryKey: ["sfriends"] });
     },
   });
 
@@ -46,7 +49,12 @@ export default function FriendsRequest({ token }: { token: string }) {
   };
 
   return (
-    <div className="flex flex-col px-3 bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: 100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="flex flex-col px-3 bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center "
+    >
       <div className="py-2 flex items-center justify-between w-full ">
         <span className="text-sm font-medium tracking-wider ">
           Friends Request
@@ -57,10 +65,19 @@ export default function FriendsRequest({ token }: { token: string }) {
         />
       </div>
       <hr className="text-slate-800  w-full h-[2px] " />
+      {isLoading && (
+        <Image
+          src="/Ellipsis-1s-200px.gif"
+          height={70}
+          width={70}
+          alt="dd"
+          className="mx-auto"
+        />
+      )}
       <ul className="flex items-center w-full  pb-3 flex-col ">
         {friendsRequest?.length <= 0 && (
           <p className=" text-sm font-bold pt-2 text-sky-500">
-            There are no friend requests
+            No friend requests yet
           </p>
         )}
         {friendsRequest
@@ -72,7 +89,7 @@ export default function FriendsRequest({ token }: { token: string }) {
             >
               <div className="flex items-center gap-2">
                 <Avatar>
-                  <AvatarImage src="/jenna.webp" />
+                  <AvatarImage src={f.requestFrom.photo} />
                 </Avatar>
                 <div className="flex flex-col items-start">
                   <span className="text-[12px] font-semibold">
@@ -95,6 +112,6 @@ export default function FriendsRequest({ token }: { token: string }) {
             </li>
           ))}
       </ul>
-    </div>
+    </motion.div>
   );
 }

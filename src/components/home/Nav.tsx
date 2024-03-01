@@ -1,16 +1,25 @@
+"use client";
 import { Bell, Heart, Mail, MessageSquare } from "lucide-react";
 import Image from "next/image";
 import { UserDropMenu } from "./UserDropMenu";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserInfo } from "@/app/actions/action";
 
-function Nav() {
+function Nav({ token, userId }: { token: string; userId: string }) {
+  const { data: userInfo } = useQuery({
+    queryKey: ["userInfo2"],
+    queryFn: () => fetchUserInfo(token, userId),
+  });
   return (
     <div className="flex items-center justify-between px-3 py-2 bg-white dark:bg-slate-900 relative">
       <div className="flex items-center gap-[60px]">
         <Link href="/">
           <Image
-            src="https://friendkit.cssninja.io/assets/img/vector/logo/friendkit-bold.svg"
+            src={
+              "https://friendkit.cssninja.io/assets/img/vector/logo/friendkit-bold.svg"
+            }
             height={40}
             width={40}
             alt="LOGO"
@@ -77,7 +86,7 @@ function Nav() {
             />
           </div>
         </form>
-        <UserDropMenu />
+        <UserDropMenu userInfo={userInfo} />
       </div>
     </div>
   );

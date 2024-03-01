@@ -6,6 +6,7 @@ import axios from "axios";
 import { ArrowBigLeftDash, CameraIcon, Edit, Edit3 } from "lucide-react";
 import Image from "next/image";
 import React, { SetStateAction, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { MdClose } from "react-icons/md";
 
 export default function UpdatePost({
@@ -21,7 +22,7 @@ export default function UpdatePost({
 
   const [description, setDescription] = useState(post?.description);
   const [file, setFile] = useState<string | "">("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState(post.image);
 
   const postId = post._id;
 
@@ -43,6 +44,14 @@ export default function UpdatePost({
   const handleUpdatePost = async () => {
     updatePostMutations.mutate({ token, description, image });
     setUpdating(false);
+    toast.success("A post has been updated", {
+      style: {
+        padding: " 20px",
+        borderRadius: "10px",
+        background: "#2196f3",
+        color: "#fff",
+      },
+    });
   };
 
   const handleDeployImg = async () => {
@@ -54,7 +63,6 @@ export default function UpdatePost({
         "https://api.cloudinary.com/v1_1/dimy2zhcs/image/upload",
         formData
       );
-
       setImage(response.data.secure_url);
     } catch (err) {
       console.log(err);
@@ -63,7 +71,7 @@ export default function UpdatePost({
 
   useEffect(() => {
     handleDeployImg();
-  }, [file]);
+  }, [file, handleDeployImg]);
 
   return (
     <div
@@ -102,9 +110,9 @@ export default function UpdatePost({
               <CameraIcon size={20} />
             </label>
           </div>
-          {post?.image || image ? (
+          {image ? (
             <Image
-              src={image ? image : post?.image}
+              src={image}
               width={200}
               height={200}
               alt=""

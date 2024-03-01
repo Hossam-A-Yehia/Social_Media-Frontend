@@ -30,6 +30,8 @@ import UpdatePost from "./UpdatePost";
 import Comments from "./Comments";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function CardPost({ post }: { post: PostsType }) {
   const [updating, setUpdating] = useState(false);
@@ -68,6 +70,14 @@ export default function CardPost({ post }: { post: PostsType }) {
       token,
       postId,
     });
+    toast.error("This Post has been deleted", {
+      style: {
+        padding: " 20px",
+        borderRadius: "10px",
+        background: "#f44336",
+        color: "#fff",
+      },
+    });
   };
 
   return (
@@ -76,7 +86,13 @@ export default function CardPost({ post }: { post: PostsType }) {
         {postId === post._id ? (
           <Comments setPostId={setPostId} token={token} postId={postId} />
         ) : (
-          <div
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            transition={{ duration: 0.7 }}
+            whileInView={{
+              opacity: 1,
+              x: 0,
+            }}
             key={post._id}
             className="flex items-start flex-col w-full  border-[1px] border-slate-300 dark:border-secbg bg-white dark:bg-secbg p-4  rounded-lg relative"
           >
@@ -138,7 +154,7 @@ export default function CardPost({ post }: { post: PostsType }) {
                 </div>
               )}
             </div>
-            <p className="text-slate-800 dark:text-slate-300 text-sm leading-6 my-3 ">
+            <p className="text-slate-800 dark:text-slate-300 text-sm leading-6 mt-3 mb-7 ">
               {post.description}
             </p>
             {post.image && (
@@ -193,7 +209,7 @@ export default function CardPost({ post }: { post: PostsType }) {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </>
 

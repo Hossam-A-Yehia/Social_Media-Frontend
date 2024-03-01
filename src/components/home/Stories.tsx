@@ -1,9 +1,15 @@
 import { Bookmark, MoreVertical, Plus } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { motion } from "framer-motion";
 
 export default function Stories() {
   return (
-    <div className="lg:flex flex-col px-3 bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center hidden ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: -100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="lg:flex flex-col px-3 bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center hidden "
+    >
       <div className="py-2 flex items-center justify-between w-full ">
         <span className="text-sm font-medium tracking-wider ">Stories</span>
         <MoreVertical
@@ -69,6 +75,6 @@ export default function Stories() {
           </div>
         </li>
       </ul>
-    </div>
+    </motion.div>
   );
 }

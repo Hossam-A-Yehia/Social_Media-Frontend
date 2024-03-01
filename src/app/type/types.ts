@@ -20,6 +20,7 @@ export type CommentType = {
   userId: {
     _id: string;
     name: string;
+    photo: string;
   };
   comment: string;
   from: string;
@@ -88,6 +89,7 @@ export type UserInfoType = {
   createdAt: string;
   updatedAt: string;
   __v: 0;
+  location: string;
 };
 
 export type RequestFriendsType = {
@@ -110,4 +112,19 @@ export type SuggestedFriendsType = {
   photo: string;
   _id: string;
   profession: string;
+};
+
+export type ReplyType = {
+  _id: string;
+  userId: {
+    _id: string;
+    name: string;
+    photo: string;
+  };
+  from: string;
+  replyAt: string;
+  comment: string;
+  created_At: string;
+  updated_At: string;
+  likes: string[];
 };

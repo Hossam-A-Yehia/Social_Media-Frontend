@@ -13,6 +13,9 @@ export default async function page() {
 
   return (
     <div>
+      <head>
+        <title>ErePain || Register</title>
+      </head>
       <div className="p-2 dark:bg-slate-900 text-center overflow-hidden">
         <Image
           src="https://friendkit.cssninja.io/assets/img/vector/logo/friendkit-bold.svg"

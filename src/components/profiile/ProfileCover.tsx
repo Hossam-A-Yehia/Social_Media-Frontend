@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Heart, Image, MoreVertical, Plus } from "lucide-react";
+import { Heart, Image as ImgIcon, MoreVertical, Plus } from "lucide-react";
 import { FcAbout } from "react-icons/fc";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
@@ -46,7 +46,7 @@ export default function ProfileCover({ userInfo }: { userInfo: UserInfoType }) {
                 </li>
                 <li className="px-2 py-2 flex items-center justify-between w-full pb-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300">
                   <div className="flex items-center gap-3">
-                    <Image size={20} color="gray" />
+                    <ImgIcon size={20} color="gray" />
                     <div className="flex flex-col ">
                       <span className="text-[12px] font-semibold">Photo</span>
                       <span className="text-[12px] text-slate-400">
@@ -88,20 +88,20 @@ export default function ProfileCover({ userInfo }: { userInfo: UserInfoType }) {
           </form>
           <h3 className="text-xl font-bold mt-2">{userInfo?.name}</h3>
           <span className="text-gray-400 text-sm text-center">
-            Frontend Develpore
+            {userInfo?.profession}
           </span>
         </div>
         <div className="md:flex items-center  gap-2 hidden">
           <button
             type="button"
-            className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 duration-300"
+            className="focus:outline-none text-white bg-[#009688] hover:bg-[#0096888f]  font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2   duration-300"
           >
             Photo
           </button>
           <Link
             href={`/profile/friends/${userInfo?._id}`}
             type="button"
-            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-10 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900 duration-300"
+            className="focus:outline-none text-white bg-[#2196F3] hover:bg-[#2196f385]   font-medium rounded-lg text-sm px-10 py-2.5 mb-2  duration-300"
           >
             Friends
           </Link>

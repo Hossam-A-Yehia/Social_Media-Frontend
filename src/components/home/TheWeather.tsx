@@ -8,10 +8,16 @@ import {
   MapPin,
   Sun,
 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function TheWeather() {
   return (
-    <div className="flex flex-col bg-sky-500 py-6 text-center  rounded-xl w-full bg-[url(https://friendkit.cssninja.io/assets/img/illustrations/cards/weather-bg.svg)] bg-no-repeat bg-cover bg-center mx-auto justify-center text-slate-100  ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: -100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="flex flex-col bg-sky-500 py-6 text-center  rounded-xl w-full bg-[url(https://friendkit.cssninja.io/assets/img/illustrations/cards/weather-bg.svg)] bg-no-repeat bg-cover bg-center mx-auto justify-center text-slate-100  "
+    >
       <span className="text-3xl font-semibold ">
         71<sup>o</sup>
       </span>
@@ -77,6 +83,6 @@ export default function TheWeather() {
         <MapPin size={15} />
         Los Angeles, CA
       </span>
-    </div>
+    </motion.div>
   );
 }

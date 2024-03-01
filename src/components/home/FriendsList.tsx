@@ -1,15 +1,25 @@
 "use client";
 import { MoreVertical } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import { fetchUserInfo } from "@/app/actions/action";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
 import { UserInfoType } from "@/app/type/types";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
-export default function FriendsList({ userInfo }: { userInfo: UserInfoType }) {
+export default function FriendsList({
+  userInfo,
+  isLoading,
+}: {
+  userInfo: UserInfoType;
+  isLoading: boolean;
+}) {
   return (
-    <div className="md:flex hidden flex-col  bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: -100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="md:flex hidden flex-col  bg-white dark:bg-secbg py-2 text-center  rounded-xl w-full mx-auto justify-center "
+    >
       <div className="py-2 flex items-center justify-between w-full ">
         <span className="text-sm font-medium tracking-wider px-3 ">
           Friends
@@ -20,13 +30,23 @@ export default function FriendsList({ userInfo }: { userInfo: UserInfoType }) {
         />
       </div>
       <hr className="text-slate-800  w-full h-[2px] " />
+      {isLoading && (
+        <Image
+          src="/Ellipsis-1s-200px.gif"
+          height={70}
+          width={70}
+          alt="dd"
+          className="mx-auto"
+        />
+      )}
       {userInfo && (
-        <ul className="flex items-center w-full  pb-3 flex-col ">
+        <ul className="flex items-center w-full   flex-col ">
           {userInfo?.friends?.length > 0 ? (
             userInfo?.friends?.map((f: UserInfoType) => (
-              <li
+              <Link
+                href={`/profile/${f._id}`}
                 key={f._id}
-                className=" p-3 flex items-center justify-between w-full pb-3   cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
+                className=" p-3 flex items-center justify-between w-full   cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
               >
                 <div className="flex items-center gap-2 ">
                   <Avatar>
@@ -39,16 +59,16 @@ export default function FriendsList({ userInfo }: { userInfo: UserInfoType }) {
                     </span>
                   </div>
                 </div>
-              </li>
+              </Link>
             ))
           ) : (
             <p className=" text-sm font-bold pt-2 text-sky-500">
-              You have no friends currently
+              You do not have any friends yet
             </p>
           )}
         </ul>
       )}
-    </div>
+    </motion.div>
   );
 }
 

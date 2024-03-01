@@ -8,6 +8,13 @@ async function page() {
 
   const token = session?.user?.token;
 
-  return <FriendsPage token={token as string} />;
+  return (
+    <>
+      <head>
+        <title>ErePain || Friends</title>
+      </head>
+      <FriendsPage token={token as string} />
+    </>
+  );
 }
 export default page;

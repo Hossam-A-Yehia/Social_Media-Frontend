@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { AuthOptions } from "next-auth";
 import { useAmp } from "next/amp";
 import { redirect } from "next/navigation";
+import { API_URL } from "@/app/actions/action";
 
 const authOptions: AuthOptions = {
   // Configure one or more authentication providers
@@ -15,7 +16,7 @@ const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any) {
-        const res = await fetch("http://localhost:2000/api/auth/login", {
+        const res = await fetch(`${API_URL}/api/auth/login`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -3,19 +3,24 @@ import { Camera, Pin, Video, Image as Imgs, MoreVertical } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { deployPost, fetchUserInfo } from "@/app/actions/action";
+import { deployPost } from "@/app/actions/action";
 import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
-export default function DeployBox({ token }: { token: string }) {
-  const { data }: any = useSession();
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { UserInfoType } from "@/app/type/types";
+import { motion } from "framer-motion";
 
-  const userId = data?.user?.user?._id;
-
+export default function DeployBox({
+  token,
+  userInfo,
+}: {
+  token: string;
+  userInfo: UserInfoType;
+}) {
   const [showImg, setShowImg] = useState(true);
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<string | "">("");
   const [image, setImage] = useState("");
+  const [loadingImage, setLoadingImage] = useState(false);
 
   const handleFileChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -24,11 +29,6 @@ export default function DeployBox({ token }: { token: string }) {
   };
 
   const queryClient = useQueryClient();
-
-  const { data: userInfo } = useQuery({
-    queryKey: ["user"],
-    queryFn: () => fetchUserInfo(token, userId),
-  });
 
   const postMutations = useMutation({
     mutationFn: ({
@@ -46,6 +46,8 @@ export default function DeployBox({ token }: { token: string }) {
   });
 
   const handleDeployImg = async () => {
+    file !== "" && setLoadingImage(true);
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "SocialMedia");
@@ -54,8 +56,10 @@ export default function DeployBox({ token }: { token: string }) {
         "https://api.cloudinary.com/v1_1/dimy2zhcs/image/upload",
         formData
       );
+      setLoadingImage(false);
       setImage(response.data.secure_url);
     } catch (err) {
+      setLoadingImage(false);
       console.log(err);
     }
   };
@@ -76,7 +80,12 @@ export default function DeployBox({ token }: { token: string }) {
   };
 
   return (
-    <div className="flex items-start flex-col w-full rounded border-[1px] border-slate-300 dark:border-secbg">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ y: -100, opacity: 0.5 }}
+      animate={{ y: 0, opacity: 1 }}
+      className="flex items-start flex-col w-full rounded border-[1px] border-slate-300 dark:border-secbg"
+    >
       <ul className="flex items-center justify-between bg-[#fcfcfc] dark:bg-secbg  w-full">
         <li className="px-[50px] py-4 text-center  w-full flex items-center text-sm gap-2 bg-white dark:bg-gray-800 border-r-[1px] border-slate-300 dark:border-secbg transition-all duration-300 cursor-pointer font-semibold text-slate-600 dark:text-slate-300">
           <Pin size={18} /> Publish
@@ -109,11 +118,18 @@ export default function DeployBox({ token }: { token: string }) {
           placeholder="Write something about you..."
         ></textarea>
       </div>
-      {image && showImg && (
+      {image && showImg && !loadingImage && (
         <div className="w-full relative h-[400px] bg-[#1f2937] ">
-          <Image src={image} alt="d" fill className="p-6" />
+          <Image src={image} alt="d" fill className="p-6 rounded-lg " />
         </div>
       )}
+
+      {loadingImage && image === "" && (
+        <div className="w-full relative h-[400px] bg-[#1f2937] p-6 ">
+          <div className="animate-pulse bg-slate-700 h-full rounded-lg  "></div>
+        </div>
+      )}
+
       <hr className="text-slate-800  w-full h-[2px] " />
       <div className="flex items-center gap-4 bg-white dark:bg-gray-800 w-full p-3">
         <div className="flex w-fit bg-slate-100 dark:bg-secbg items-center gap-2 px-3 py-1 text-sm rounded-full text-gray-500 dark:text-slate-300">
@@ -137,14 +153,14 @@ export default function DeployBox({ token }: { token: string }) {
         </div>
         {postMutations.isPending ? (
           <button
-            disabled
+            disabled={postMutations.isPending}
             type="button"
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-1.5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center ml-auto duration-300 w-[100px] h-[40px]   text-center "
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-1.5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center ml-auto duration-300 w-[100px] h-[40px]   text-center disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <svg
               aria-hidden="true"
               role="status"
-              className="inline w-4 h-4 me-2 text-white animate-spin"
+              className="inline w-4 h-4 mx-auto text-white animate-spin "
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -158,18 +174,18 @@ export default function DeployBox({ token }: { token: string }) {
                 fill="currentColor"
               />
             </svg>
-            Loading...
           </button>
         ) : (
           <button
+            disabled={postMutations.isPending}
             type="button"
             onClick={() => handleSubmotPost()}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 block ml-auto duration-300 w-[100px] h-[40px]   text-center"
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 block ml-auto duration-300 w-[100px] h-[40px]   text-center "
           >
             Publish
           </button>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

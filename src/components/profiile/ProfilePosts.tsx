@@ -1,5 +1,6 @@
 import { PostsType } from "@/app/type/types";
 import CardPost from "../home/CardPost";
+import NoPosts from "../home/NoPosts";
 
 export default function ProfilePosts({
   userPosts,
@@ -12,9 +13,13 @@ export default function ProfilePosts({
         Basic Infos
       </div>
       <div className=" flex flex-col gap-3">
-        {userPosts?.length > 0
-          ? userPosts?.map((post: PostsType) => <CardPost post={post} />)
-          : ""}
+        {userPosts?.length > 0 ? (
+          userPosts?.map((post: PostsType) => (
+            <CardPost post={post} key={post._id} />
+          ))
+        ) : (
+          <NoPosts />
+        )}
       </div>
     </div>
   );

@@ -1,9 +1,15 @@
 import { Briefcase, MoreVertical } from "lucide-react";
 import { Avatar, AvatarImage } from "../ui/avatar";
+import { motion } from "framer-motion";
 
 export default function NewJob() {
   return (
-    <div className="lg:flex hidden flex-col bg-sky-600 py-6 text-center  rounded-xl w-full bg-[url(https://friendkit.cssninja.io/assets/img/illustrations/cards/job-bg.svg)] bg-no-repeat bg-cover bg-center mx-auto justify-center text-slate-100 px-4  ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: 100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className="lg:flex hidden flex-col bg-sky-600 py-6 text-center  rounded-xl w-full bg-[url(https://friendkit.cssninja.io/assets/img/illustrations/cards/job-bg.svg)] bg-no-repeat bg-cover bg-center mx-auto justify-center text-slate-100 px-4  "
+    >
       <div className="py-2 flex items-center justify-between w-full ">
         <Briefcase size={22} className="text-slate-100   " />
         <MoreVertical
@@ -23,6 +29,6 @@ export default function NewJob() {
       <button className="px-4 py-2 my-3 text-white border-[1px] rounded-lg border-white hover:text-slate-900 hover:bg-white transition-all duration-300 w-fit text-sm block mx-auto ">
         Write Message{" "}
       </button>
-    </div>
+    </motion.div>
   );
 }

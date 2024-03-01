@@ -7,5 +7,12 @@ export default async function page() {
   const session: SessionType | null = await getServerSession(authOptions);
   const token = session?.user?.token;
 
-  return <ProfileContent token={token as string} />;
+  return (
+    <>
+      <head>
+        <title>ErePain || Profile</title>
+      </head>
+      <ProfileContent token={token as string} />
+    </>
+  );
 }

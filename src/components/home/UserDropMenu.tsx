@@ -10,12 +10,11 @@ import {
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { ModeToggle } from "../ModeToggle";
 import { Check, LifeBuoy, LogOut, Settings } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { UserInfoType } from "@/app/type/types";
 
-export function UserDropMenu() {
-  const { data }: any = useSession();
-
+export function UserDropMenu({ userInfo }: { userInfo: UserInfoType }) {
   const logOut = () => {
     signOut({
       callbackUrl: "http://localhost:3000/login",
@@ -25,28 +24,30 @@ export function UserDropMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src="/jenna.webp" className=" cursor-pointer" />
+          <AvatarImage src={userInfo?.photo} className=" cursor-pointer" />
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className=" w-[350px] me-2 flex items-center flex-col rounded-xl  ">
         <div className="py-3  px-6 flex items-center justify-between w-full ">
           <span className="text-xs font-semibold text-slate-400">
-            HOSSAM YEHIA
+            {userInfo?.name}
           </span>
           <ModeToggle />
         </div>
         <hr className="text-slate-800  w-full h-[2px] " />
         <ul className="flex items-center w-full  pb-3 flex-col ">
           <Link
-            href={`/profile/${data?.user?.user?._id}`}
+            href={`/profile/${userInfo?._id}`}
             className="px-6 py-3 flex items-center justify-between w-full pb-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
           >
             <div className="flex items-center gap-2">
               <Avatar>
-                <AvatarImage src="/jenna.webp" />
+                <AvatarImage src={userInfo?.photo} />
               </Avatar>
               <div className="flex flex-col">
-                <span className="text-[12px] font-semibold">Hossam Yehia</span>
+                <span className="text-[12px] font-semibold">
+                  {userInfo?.name}
+                </span>
                 <span className="text-[12px] text-slate-400">Main account</span>
               </div>
             </div>

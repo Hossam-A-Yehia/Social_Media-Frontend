@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { UserInfoType } from "@/app/type/types";
+import { motion } from "framer-motion";
 
 export default function FriendsPage({ token }: { token: string }) {
   const params = useParams();
@@ -17,7 +18,12 @@ export default function FriendsPage({ token }: { token: string }) {
   });
 
   return (
-    <div className=" px-[20px] lg:px-[125px]  w-full bg-slate-100 py-[20px]  dark:bg-mainbg ">
+    <motion.div
+      transition={{ duration: 0.7 }}
+      initial={{ x: 100, opacity: 0.5 }}
+      animate={{ x: 0, opacity: 1 }}
+      className=" px-[20px] lg:px-[125px]  w-full bg-slate-100 py-[20px]  dark:bg-mainbg "
+    >
       <ProfileCover userInfo={userInfo} />
       <div className=" dark:bg-secbg bg-white w-full mt-[50px] flex items-center justify-between rounded-lg p-3">
         <span className="text-sm dark:text-slate-300 text-slate-900 font-semibold">
@@ -64,7 +70,7 @@ export default function FriendsPage({ token }: { token: string }) {
             key={e._id}
             className=" w-full md:w-1/2  lg:w-1/4 p-2 text-center  "
           >
-            <div className="flex flex-col gap-2 rounded-lg dark:bg-secbg bg-white py-5 items-center justify-center hover:bg-red-200 hover:translate-y-2 duration-300">
+            <div className="flex flex-col gap-2 rounded-lg dark:bg-secbg bg-white py-5 items-center justify-center hover:bg-[#2196f333] hover:translate-y-2 duration-300">
               <div className="flex flex-col">
                 <Avatar className="size-[90px] overflow-visible   mx-auto  relative">
                   <AvatarImage className=" rounded-full " src={e.photo} />
@@ -84,7 +90,9 @@ export default function FriendsPage({ token }: { token: string }) {
                 </div>
                 <div className="flex flex-col px-3 border-x border-x-gray-400">
                   <span className="text-[10px] text-gray-400 ">POSTS</span>
-                  <span className="text-sm font-semibold">12</span>
+                  <span className="text-sm font-semibold">
+                    {e.posts?.length}
+                  </span>
                 </div>
                 <div className="flex flex-col px-3">
                   <span className="text-[10px] text-gray-400 ">VIEWS</span>
@@ -97,6 +105,6 @@ export default function FriendsPage({ token }: { token: string }) {
           </Link>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

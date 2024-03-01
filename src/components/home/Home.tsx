@@ -6,14 +6,17 @@ import SuggestedFrients from "@/components/home/SuggestedFrients";
 import TheWeather from "@/components/home/TheWeather";
 import Posts from "@/components/home/Posts";
 import FriendsList from "@/components/home/FriendsList";
-import { useSession } from "next-auth/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { fetchUserInfo } from "@/app/actions/action";
 
-export default function HomeComponents({ token }: { token: string }) {
-  const { data }: any = useSession();
-  const userId = String(data?.user?.user?._id);
-  const { data: userInfo } = useQuery({
+export default function HomeComponents({
+  token,
+  userId,
+}: {
+  token: string;
+  userId: string;
+}) {
+  const { data: userInfo, isLoading } = useQuery({
     queryKey: ["userInfo"],
     queryFn: () => fetchUserInfo(token, userId),
   });
@@ -22,15 +25,15 @@ export default function HomeComponents({ token }: { token: string }) {
     <div className=" py-4 container mx-auto h-full flex  bg-slate-100  dark:bg-mainbg">
       {/* LEFT */}
       <div className="hidden items-center flex-col gap-4 w-1/4 h-full px-4 lg:flex">
-        <FriendsList userInfo={userInfo} />
+        <FriendsList userInfo={userInfo} isLoading={isLoading} />
         <Stories />
         <TheWeather />
       </div>
       {/* CENTER */}
-      <Posts token={token} />
+      <Posts token={token} userInfo={userInfo} />
       {/* RIGHT */}
       <div className="flex items-center flex-col gap-4 w-1/4 h-full px-4 sticky left-0 bottom-[16px]">
-        <SuggestedFrients token={token} />
+        <SuggestedFrients token={token} userInfo={userInfo} />
         <FriendsRequest token={token} />
 
         <NewJob />

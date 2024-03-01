@@ -1,5 +1,5 @@
 "use client";
-import { User, Image, Lock, Flag } from "lucide-react";
+import { User, Image as ImgIcon, Lock, Flag } from "lucide-react";
 
 function ProgressBar({ prog }: { prog: string }) {
   return (
@@ -21,7 +21,7 @@ function ProgressBar({ prog }: { prog: string }) {
             prog !== "0%" ? "border-[1px] border-sky-600 scale-125" : ""
           } `}
         >
-          <Image
+          <ImgIcon
             className={` transition-all duration-500  ${
               prog !== "0%" ? "text-sky-600" : "text-gray-200"
             }`}
