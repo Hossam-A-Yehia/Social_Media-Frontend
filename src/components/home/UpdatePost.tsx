@@ -71,7 +71,7 @@ export default function UpdatePost({
 
   useEffect(() => {
     handleDeployImg();
-  }, [file, handleDeployImg]);
+  }, [file]);
 
   return (
     <div

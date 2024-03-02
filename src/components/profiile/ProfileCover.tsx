@@ -1,3 +1,4 @@
+"use client";
 import { FaCamera } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -9,8 +10,12 @@ import { FcAbout } from "react-icons/fc";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import Link from "next/link";
 import { UserInfoType } from "@/app/type/types";
+import { useParams } from "next/navigation";
 
 export default function ProfileCover({ userInfo }: { userInfo: UserInfoType }) {
+  const { profileId } = useParams();
+  console.log(profileId);
+
   return (
     <div className="group flex flex-col gap-3 relative">
       <div className=" relative w-full h-[350px] bg-cover bg-[url(/4.webp)] before:content-[''] before:bg-black/30 before:opacity-0 hover:before:opacity-100  before:w-full before:h-full before:left-0 before:top-0 before:absolute before:transition-all before:duration-300 ">
@@ -33,7 +38,10 @@ export default function ProfileCover({ userInfo }: { userInfo: UserInfoType }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent className=" w-fit flex mr-10 items-center flex-col rounded-xl md:hidden ">
               <ul className="flex items-center w-[250px]  pb-3 flex-col ">
-                <li className="px-2 py-2 flex items-center justify-between w-full pb-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300">
+                <Link
+                  href={`/profile/friends/${profileId}`}
+                  className="px-2 py-2 flex items-center justify-between w-full pb-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300"
+                >
                   <div className="flex items-center gap-3">
                     <Heart size={20} color="gray" />
                     <div className="flex flex-col ">
@@ -43,7 +51,7 @@ export default function ProfileCover({ userInfo }: { userInfo: UserInfoType }) {
                       </span>
                     </div>
                   </div>
-                </li>
+                </Link>
                 <li className="px-2 py-2 flex items-center justify-between w-full pb-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300">
                   <div className="flex items-center gap-3">
                     <ImgIcon size={20} color="gray" />

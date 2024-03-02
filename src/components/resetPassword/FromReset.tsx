@@ -176,7 +176,7 @@ export default function FromReset() {
         animate={{ y: "-50%", x: "-50%" }}
         className=" absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden lg:block"
       >
-        <Avatar className="size-[100px] overflow-visible bg-white dark:bg-slate-800   mx-auto   p-2">
+        <Avatar className="size-[100px] overflow-visible bg-white dark:bg-slate-800   mx-auto hidden lg:block  p-2">
           <AvatarImage
             className=" rounded-full bg-sky-600 p-2 rotate-[20deg]  "
             src="https://friendkit.cssninja.io/assets/img/vector/logo/friendkit-white.svg"

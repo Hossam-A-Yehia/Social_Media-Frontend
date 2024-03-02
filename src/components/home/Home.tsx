@@ -22,7 +22,7 @@ export default function HomeComponents({
   });
 
   return (
-    <div className=" py-4 container mx-auto h-full flex  bg-slate-100  dark:bg-mainbg">
+    <div className=" py-4 container mx-auto h-full flex  bg-slate-100  dark:bg-mainbg overflow-hidden">
       {/* LEFT */}
       <div className="hidden items-center flex-col gap-4 w-1/4 h-full px-4 lg:flex">
         <FriendsList userInfo={userInfo} isLoading={isLoading} />
@@ -32,7 +32,7 @@ export default function HomeComponents({
       {/* CENTER */}
       <Posts token={token} userInfo={userInfo} />
       {/* RIGHT */}
-      <div className="flex items-center flex-col gap-4 w-1/4 h-full px-4 sticky left-0 bottom-[16px]">
+      <div className=" items-center flex-col gap-4 w-1/4 h-full px-4 sticky left-0 bottom-[16px] hidden lg:flex">
         <SuggestedFrients token={token} userInfo={userInfo} />
         <FriendsRequest token={token} />
 

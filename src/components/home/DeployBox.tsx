@@ -16,7 +16,6 @@ export default function DeployBox({
   token: string;
   userInfo: UserInfoType;
 }) {
-  const [showImg, setShowImg] = useState(true);
   const [description, setDescription] = useState("");
   const [file, setFile] = useState<string | "">("");
   const [image, setImage] = useState("");
@@ -46,7 +45,7 @@ export default function DeployBox({
   });
 
   const handleDeployImg = async () => {
-    file !== "" && setLoadingImage(true);
+    file && setLoadingImage(true);
 
     const formData = new FormData();
     formData.append("file", file);
@@ -56,11 +55,12 @@ export default function DeployBox({
         "https://api.cloudinary.com/v1_1/dimy2zhcs/image/upload",
         formData
       );
+      setImage(response?.data?.secure_url);
       setLoadingImage(false);
-      setImage(response.data.secure_url);
+      console.log(response.data);
     } catch (err) {
-      setLoadingImage(false);
       console.log(err);
+      setLoadingImage(false);
     }
   };
 
@@ -76,7 +76,6 @@ export default function DeployBox({
     } as any);
     setImage("");
     setDescription("");
-    setShowImg(false);
   };
 
   return (
@@ -102,7 +101,7 @@ export default function DeployBox({
           className="hidden"
           onChange={handleFileChange}
         />
-        <li className="px-[50px] py-4  w-full text-center  flex items-center text-sm gap-2  hover:bg-gray-300 dark:hover:bg-gray-700 border-b-[1px] border-slate-300 transition-all duration-300 cursor-pointer font-semibold text-slate-600 dark:text-slate-300 dark:border-secbg">
+        <li className="px-[50px] py-4  w-full text-center  lg:flex items-center text-sm gap-2  hover:bg-gray-300 dark:hover:bg-gray-700 border-b-[1px] border-slate-300 transition-all duration-300 cursor-pointer font-semibold text-slate-600 dark:text-slate-300 dark:border-secbg hidden ">
           <Video size={18} /> Video
         </li>
       </ul>
@@ -118,13 +117,18 @@ export default function DeployBox({
           placeholder="Write something about you..."
         ></textarea>
       </div>
-      {image && showImg && !loadingImage && (
+      {image && !loadingImage && (
         <div className="w-full relative h-[400px] bg-[#1f2937] ">
-          <Image src={image} alt="d" fill className="p-6 rounded-lg " />
+          <Image
+            src={image}
+            alt="Post Image"
+            fill
+            className="p-6 rounded-lg "
+          />
         </div>
       )}
 
-      {loadingImage && image === "" && (
+      {loadingImage && (
         <div className="w-full relative h-[400px] bg-[#1f2937] p-6 ">
           <div className="animate-pulse bg-slate-700 h-full rounded-lg  "></div>
         </div>
