@@ -1,8 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { AuthOptions } from "next-auth";
-import { useAmp } from "next/amp";
-import { redirect } from "next/navigation";
 import { API_URL } from "@/app/actions/action";
 
 const authOptions: AuthOptions = {
@@ -30,7 +28,7 @@ const authOptions: AuthOptions = {
         if (res.status === 200) {
           return data;
         }
-        throw new Error(data.message);
+        throw new Error(data.message) || null;
       },
     } as any),
   ],
@@ -46,6 +44,19 @@ const authOptions: AuthOptions = {
       session.user = token;
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
+  },
+  session: {
+    // ↓↓↓ add
+    jwt: true as any,
+    // ↑↑↑ add
+  },
+};
+export const config = {
+  api: {
+    bodyParser: false,
   },
 };
 
